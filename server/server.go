@@ -1,3 +1,4 @@
+// Package server implements a redis server
 package server
 
 import (
