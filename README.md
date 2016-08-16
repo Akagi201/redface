@@ -14,11 +14,11 @@ It can be used as a redis server-side api in golang.
 - [ ] Support TLS.
 - [ ] Support net/context.
 
-## install
+## Install
 
 * `go get github.com/Akagi201/redface`
 
-## import
+## Import
 
 * `import "github.com/Akagi201/redface/resp"`
 * `import "github.com/Akagi201/redface/server"`
