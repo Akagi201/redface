@@ -1,5 +1,7 @@
 # RedFace
 
+[![Build Status](https://travis-ci.org/Akagi201/redface.svg)](https://travis-ci.org/Akagi201/redface) [![Coverage Status](https://coveralls.io/repos/github/Akagi201/redface/badge.svg?branch=master)](https://coveralls.io/github/Akagi201/redface?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/Akagi201/redface)](https://goreportcard.com/report/github.com/Akagi201/redface) [![GoDoc](https://godoc.org/github.com/Akagi201/redface?status.svg)](https://godoc.org/github.com/Akagi201/redface)
+
 RedFace is redis interface.
 
 It can be used as a redis server-side api in golang.
