@@ -115,6 +115,12 @@ func NewRespIOErr(err error) *Resp {
 	return r
 }
 
+// NewRespErr is a convenience method for making Resps to wrap errors
+func NewRespErr(s string) *Resp {
+	err := fmt.Errorf("ERR %v", s)
+	return NewResp(err)
+}
+
 // RespReader is a wrapper around an io.Reader which will read Resp messages off
 // of the io.Reader
 type RespReader struct {
