@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Akagi201/redface/resp"
+	"github.com/mediocregopher/radix.v2/redis"
 )
 
 // The HandlerFunc type is an adapter to allow the use of
@@ -96,7 +96,7 @@ func (srv *Server) Serve(l net.Listener) error {
 	}
 }
 
-var invalidCmdResp = resp.NewResp(errors.New("ERR invalid command"))
+var invalidCmdResp = redis.NewResp(errors.New("ERR invalid command"))
 
 // doServe starts a new redis session, using `conn` as a transport.
 // It reads commands using the redis protocol, passes them to `handler`,
@@ -109,7 +109,7 @@ func (srv *Server) doServe(conn net.Conn) {
 		conn.Close()
 	}()
 
-	rr := resp.NewRespReader(conn)
+	rr := redis.NewRespReader(conn)
 
 outer:
 	for {
@@ -117,7 +117,7 @@ outer:
 		var args []string
 
 		m := rr.Read()
-		if m.IsType(resp.IOErr) {
+		if m.IsType(redis.IOErr) {
 			log.Printf("Client connection error %q", m.Err)
 			conn.Close()
 			return
@@ -165,7 +165,7 @@ func (srv *Server) Dispatch(conn net.Conn, cmd string, args []string) {
 		return
 	}
 
-	resp.NewResp(ret).WriteTo(conn)
+	redis.NewResp(ret).WriteTo(conn)
 }
 
 // Handle registers the handler for the given cmd.
@@ -187,5 +187,5 @@ func (srv *Server) Handle(cmd string, handlerFunc HandlerFunc) {
 
 func writeErrf(w io.Writer, format string, args ...interface{}) {
 	err := fmt.Errorf(format, args...)
-	resp.NewResp(err).WriteTo(w)
+	redis.NewResp(err).WriteTo(w)
 }

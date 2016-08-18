@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/Akagi201/redface/resp"
 	"github.com/Akagi201/redface/server"
+	"github.com/mediocregopher/radix.v2/redis"
 )
 
-var pongSS = resp.NewRespSimple("PONG")
+var pongSS = redis.NewRespSimple("PONG")
 
 func pingHandler(args []string) (interface{}, error) {
 	return pongSS, nil
