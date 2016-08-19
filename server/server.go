@@ -33,30 +33,51 @@ type Server struct {
 	m map[string]HandlerFunc
 }
 
-// NewServer creates a new redis server
-func NewServer(proto string, host string, port int) (*Server, error) {
+// Opts are Options which can be passed in to NewWithOpts. If any are set to
+// their zero value the default value will be used instead
+type Opts struct {
+	// "unix" for unix socket, "tcp" for tcp
+	Proto string
+	// The address to listen at
+	Host string
+	// The port to listen at
+	Port int
+}
+
+// New creates a new tcp redis server with the port.
+func New(port int) (*Server, error) {
+	return NewWithOpts(Opts{
+		Port: port,
+	})
+}
+
+// NewWithOpts is the same as New, but with more fine-tuned
+// configuration options. See Opts for more available options.
+func NewWithOpts(o Opts) (*Server, error) {
+	if len(o.Proto) == 0 {
+		o.Proto = "tcp"
+	}
+
+	if len(o.Host) == 0 {
+		o.Host = "127.0.0.1"
+	}
+
+	if o.Port == 0 {
+		o.Port = 6389
+	}
+
 	srv := &Server{
-		Proto: proto,
+		Proto: o.Proto,
 		m:     make(map[string]HandlerFunc),
 	}
 
 	if srv.Proto == "unix" {
-		srv.Addr = host
+		srv.Addr = o.Host
 	} else {
-		srv.Addr = fmt.Sprintf("%s:%d", host, port)
+		srv.Addr = fmt.Sprintf("%s:%d", o.Host, o.Port)
 	}
 
 	return srv, nil
-}
-
-// NewTCPServer creates a new tcp redis server
-func NewTCPServer(host string, port int) (*Server, error) {
-	return NewServer("tcp", host, port)
-}
-
-// NewUnixServer creates a new unix sockets redis server
-func NewUnixServer(host string, port int) (*Server, error) {
-	return NewServer("unix", host, port)
 }
 
 // ListenAndServe listens on the TCP or Unix socket network address srv.Addr and then

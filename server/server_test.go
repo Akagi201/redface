@@ -20,7 +20,7 @@ func Example() {
 		}
 	}()
 
-	srv, err := server.NewServer("tcp", "127.0.0.1", 6379)
+	srv, err := server.New(6379)
 	if err != nil {
 		panic(err)
 	}
