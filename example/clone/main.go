@@ -54,7 +54,7 @@ func getHandler(args []string) (interface{}, error) {
 
 func main() {
 	go func() {
-		http.ListenAndServe(":6666", nil)
+		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 	defer func() {
 		if err := recover(); err != nil {
