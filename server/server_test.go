@@ -20,7 +20,7 @@ func Example() {
 		}
 	}()
 
-	srv, err := server.New(6379)
+	srv, err := server.New(6389)
 	if err != nil {
 		panic(err)
 	}
