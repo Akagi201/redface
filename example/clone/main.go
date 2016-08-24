@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	_ "net/http/pprof"
 	"sync"
@@ -20,7 +21,7 @@ func newRespErr(s string) *redis.Resp {
 	return redis.NewResp(err)
 }
 
-func pingHandler(args []string) (interface{}, error) {
+func pingHandler(conn net.Conn, args []string) (interface{}, error) {
 	return pongSS, nil
 }
 
@@ -29,7 +30,7 @@ var (
 	redisHash = make(map[string]string)
 )
 
-func setHandler(args []string) (interface{}, error) {
+func setHandler(conn net.Conn, args []string) (interface{}, error) {
 	if len(args) < 2 {
 		return newRespErr("missing args"), nil
 	}
@@ -41,7 +42,7 @@ func setHandler(args []string) (interface{}, error) {
 	return okSS, nil
 }
 
-func getHandler(args []string) (interface{}, error) {
+func getHandler(conn net.Conn, args []string) (interface{}, error) {
 	if len(args) < 1 {
 		return newRespErr("missing args"), nil
 	}
@@ -50,6 +51,11 @@ func getHandler(args []string) (interface{}, error) {
 	defer mu.RUnlock()
 
 	return redis.NewRespSimple(redisHash[args[0]]), nil
+}
+
+func quitHandler(conn net.Conn, args []string) (interface{}, error) {
+	conn.Close()
+	return nil, nil
 }
 
 func main() {
@@ -72,6 +78,8 @@ func main() {
 	srv.Handle("set", setHandler)
 
 	srv.Handle("get", getHandler)
+
+	srv.Handle("quit", quitHandler)
 
 	if err := srv.ListenAndServe(); err != nil {
 		panic(err)

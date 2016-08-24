@@ -2,6 +2,7 @@ package server_test
 
 import (
 	"log"
+	"net"
 
 	"github.com/Akagi201/redface/resp"
 	"github.com/Akagi201/redface/server"
@@ -9,7 +10,7 @@ import (
 
 var pongSS = resp.NewRespSimple("PONG")
 
-func pingHandler(args []string) (interface{}, error) {
+func pingHandler(conn net.Conn, args []string) (interface{}, error) {
 	return pongSS, nil
 }
 

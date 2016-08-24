@@ -17,7 +17,7 @@ import (
 // ordinary functions as HTTP handlers. If f is a function
 // with the appropriate signature, HandlerFunc(f) is a
 // Handler that calls f.
-type HandlerFunc func(args []string) (interface{}, error)
+type HandlerFunc func(conn net.Conn, args []string) (interface{}, error)
 
 // Server A Server defines parameters for running an Redis API Server.
 // The zero value for Server is a valid configuration.
@@ -179,7 +179,7 @@ func (srv *Server) Dispatch(conn net.Conn, cmd string, args []string) {
 		return
 	}
 
-	ret, err := handlerFunc(args)
+	ret, err := handlerFunc(conn, args)
 	if err != nil {
 		writeErrf(conn, "ERR unexpected server-side error")
 		log.Printf("command %s %#v err: %s", cmd, args, err)

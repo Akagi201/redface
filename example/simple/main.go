@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net"
 
 	"github.com/Akagi201/redface/server"
 	"github.com/mediocregopher/radix.v2/redis"
@@ -9,8 +10,13 @@ import (
 
 var pongSS = redis.NewRespSimple("PONG")
 
-func pingHandler(args []string) (interface{}, error) {
+func pingHandler(conn net.Conn, args []string) (interface{}, error) {
 	return pongSS, nil
+}
+
+func quitHandler(conn net.Conn, args []string) (interface{}, error) {
+	conn.Close()
+	return nil, nil
 }
 
 func main() {
@@ -20,12 +26,14 @@ func main() {
 		}
 	}()
 
-	srv, err := server.New(6379)
+	srv, err := server.New(6389)
 	if err != nil {
 		panic(err)
 	}
 
 	srv.Handle("ping", pingHandler)
+
+	srv.Handle("quit", quitHandler)
 
 	if err := srv.ListenAndServe(); err != nil {
 		panic(err)
