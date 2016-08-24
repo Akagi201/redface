@@ -11,12 +11,12 @@ It can be used as a redis server-side api in golang.
 - [x] Suport tcp protocol.
 - [x] Support unix socket protocol.
 - [x] Support net/http like interface.
+- [x] Add benchmarks.
 - [ ] Support pipelining.
 - [ ] Support telnet commands.
 - [ ] Support redis lua script.
 - [ ] Support TLS.
 - [ ] Support net/context.
-- [ ] Add benchmarks.
 
 ## Install
 
