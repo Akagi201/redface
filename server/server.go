@@ -164,7 +164,7 @@ outer:
 			}
 		}
 
-		log.Printf("redis: doServe cmd: %s, args: %#v", cmd, args)
+		// log.Printf("redis: doServe cmd: %s, args: %#v", cmd, args)
 		srv.Dispatch(conn, cmd, args)
 	}
 }
